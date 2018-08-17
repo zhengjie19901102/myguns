@@ -24,12 +24,9 @@ public class I18nInterceptor implements HandlerInterceptor {
     @Override
     public boolean preHandle(HttpServletRequest request,
                              HttpServletResponse response, Object o) throws Exception {
-
         /**
          * 当语言为en时，默认国家设置为US(美国)
          */
-        Locale locale = request.getLocale();
-        String language = locale.getLanguage();
         Cookie[] cookies = request.getCookies();
         String value = null;
         for (Cookie cookie:cookies) {
@@ -59,6 +56,5 @@ public class I18nInterceptor implements HandlerInterceptor {
     @Override
     public void afterCompletion(HttpServletRequest request,
                                 HttpServletResponse response, Object o, Exception e) throws Exception {
-
     }
 }
