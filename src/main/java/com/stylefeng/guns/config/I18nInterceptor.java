@@ -1,5 +1,6 @@
 package com.stylefeng.guns.config;
 
+import com.stylefeng.guns.core.util.CookieUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;
@@ -27,23 +28,19 @@ public class I18nInterceptor implements HandlerInterceptor {
         /**
          * 当语言为en时，默认国家设置为US(美国)
          */
-        Cookie[] cookies = request.getCookies();
-        String value = null;
-        for (Cookie cookie:cookies) {
-            String name = cookie.getName();
-            if(CONTET.equals(name)){
-                value = cookie.getValue();
-            }
-        }
+        String value = CookieUtil.getCookieValue(request,CONTET);
         if(value == null){
-            localeResolver.setLocale(request,response,new Locale("zh","CN"));
-            response.addCookie(new Cookie(CONTET,"zh_CN"));
-        }else if("en_US".equals(value)){
-            localeResolver.setLocale(request,response,new Locale("en","US"));
-            response.addCookie(new Cookie(CONTET,"en_US"));
-        }else if ("zh_CN".equals(value)){
-            response.addCookie(new Cookie(CONTET,"zh_CN"));
-            localeResolver.setLocale(request,response,new Locale("zh","CN"));
+            localeResolver.setLocale(request,response,new Locale("zh"));
+            response.addCookie(new Cookie(CONTET,"zh"));
+        }else if(value.contains("en")){
+            localeResolver.setLocale(request,response,new Locale("en"));
+            response.addCookie(new Cookie(CONTET,"en"));
+        }else if (value.contains("zh")){
+            response.addCookie(new Cookie(CONTET,"zh"));
+            localeResolver.setLocale(request,response,new Locale("zh"));
+        }else if(value.contains("fr")){
+            response.addCookie(new Cookie(CONTET,"fr"));
+            localeResolver.setLocale(request,response,new Locale("fr"));
         }
         return true;
     }
